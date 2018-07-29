@@ -11,9 +11,10 @@ using ThesisProcessor.Data;
 namespace ThesisProcessor.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180729182010_Add multiple thesis to user")]
+    partial class Addmultiplethesistouser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -196,7 +197,7 @@ namespace ThesisProcessor.Data.Migrations
 
                     b.Property<DateTime>("DateModified");
 
-                    b.Property<string>("FileName");
+                    b.Property<string>("FilePath");
 
                     b.Property<string>("References");
 

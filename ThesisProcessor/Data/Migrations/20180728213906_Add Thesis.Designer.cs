@@ -11,9 +11,10 @@ using ThesisProcessor.Data;
 namespace ThesisProcessor.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180728213906_Add Thesis")]
+    partial class AddThesis
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -188,15 +189,13 @@ namespace ThesisProcessor.Data.Migrations
 
                     b.Property<string>("Abstract");
 
-                    b.Property<bool>("Approved");
-
-                    b.Property<string>("Author");
+                    b.Property<string>("AuthorId");
 
                     b.Property<DateTime>("DateCreated");
 
                     b.Property<DateTime>("DateModified");
 
-                    b.Property<string>("FileName");
+                    b.Property<string>("FilePath");
 
                     b.Property<string>("References");
 
@@ -204,12 +203,11 @@ namespace ThesisProcessor.Data.Migrations
 
                     b.Property<string>("Title");
 
-                    b.Property<string>("UploaderId")
-                        .IsRequired();
-
                     b.HasKey("Id");
 
-                    b.HasIndex("UploaderId");
+                    b.HasIndex("AuthorId")
+                        .IsUnique()
+                        .HasFilter("[AuthorId] IS NOT NULL");
 
                     b.ToTable("Theses");
                 });
@@ -261,10 +259,9 @@ namespace ThesisProcessor.Data.Migrations
 
             modelBuilder.Entity("ThesisProcessor.Models.Thesis", b =>
                 {
-                    b.HasOne("ThesisProcessor.Models.ApplicationUser", "Uploader")
-                        .WithMany("Theses")
-                        .HasForeignKey("UploaderId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                    b.HasOne("ThesisProcessor.Models.ApplicationUser", "Author")
+                        .WithOne("Thesis")
+                        .HasForeignKey("ThesisProcessor.Models.Thesis", "AuthorId");
                 });
 #pragma warning restore 612, 618
         }

@@ -11,9 +11,10 @@ using ThesisProcessor.Data;
 namespace ThesisProcessor.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180728105741_add name to User")]
+    partial class addnametoUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -181,39 +182,6 @@ namespace ThesisProcessor.Data.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("ThesisProcessor.Models.Thesis", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Abstract");
-
-                    b.Property<bool>("Approved");
-
-                    b.Property<string>("Author");
-
-                    b.Property<DateTime>("DateCreated");
-
-                    b.Property<DateTime>("DateModified");
-
-                    b.Property<string>("FileName");
-
-                    b.Property<string>("References");
-
-                    b.Property<string>("Supervisor");
-
-                    b.Property<string>("Title");
-
-                    b.Property<string>("UploaderId")
-                        .IsRequired();
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UploaderId");
-
-                    b.ToTable("Theses");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
@@ -256,14 +224,6 @@ namespace ThesisProcessor.Data.Migrations
                     b.HasOne("ThesisProcessor.Models.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("ThesisProcessor.Models.Thesis", b =>
-                {
-                    b.HasOne("ThesisProcessor.Models.ApplicationUser", "Uploader")
-                        .WithMany("Theses")
-                        .HasForeignKey("UploaderId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
