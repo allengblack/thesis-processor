@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -6,22 +7,25 @@ using System.IO;
 using System.Threading.Tasks;
 using ThesisProcessor.Interfaces;
 using ThesisProcessor.Models;
-using ThesisProcessor.Models.HomeViewModels;
+using ThesisProcessor.Models.ThesesViewModels;
 using static ThesisProcessor.Constants.Constants;
 
 namespace ThesisProcessor.Services
 {
     public class ThesisService : IThesisService
     {
+
+        private readonly IMapper _mapper;
         private readonly IThesisDAL _thesisDAL;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IHttpContextAccessor _contextAccessor;
 
-        public ThesisService(IThesisDAL thesisDAL, UserManager<ApplicationUser> userManager, IHttpContextAccessor contextAccessor)
+        public ThesisService(IThesisDAL thesisDAL, UserManager<ApplicationUser> userManager, IHttpContextAccessor contextAccessor, IMapper mapper)
         {
             _thesisDAL = thesisDAL;
             _userManager = userManager;
             _contextAccessor = contextAccessor;
+            _mapper = mapper;
         }
 
         public async Task<IEnumerable<Thesis>> GetAllTheses()
@@ -34,7 +38,7 @@ namespace ThesisProcessor.Services
             return await _thesisDAL.GetThesis(id);
         }
 
-        public async Task SubmitThesis(ThesisSaveViewModel model)
+        public async Task SubmitThesis(ThesisCreateViewModel model)
         {
             var user = await GetCurrentUserAsync();
             var filename = $"{model.Author}-{model.Title}{GetFileExtension(model.Thesis.ContentType)}";
@@ -64,10 +68,15 @@ namespace ThesisProcessor.Services
             await _thesisDAL.DeleteThesis(thesisId);
         }
 
-        public async Task UpdateTheis(ThesisSaveViewModel model)
+        public async Task UpdateThesis(ThesisSaveViewModel model)
         {
-            var thesis = new Thesis();
+            var thesis = _mapper.Map<Thesis>(model);
             await _thesisDAL.UpdateThesis(thesis);
+        }
+
+        public async Task ApproveThesis(string id)
+        {
+            await _thesisDAL.ApproveThesis(id);
         }
 
         #region PrivateMethods

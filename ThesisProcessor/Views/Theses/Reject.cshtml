@@ -1,0 +1,19 @@
+﻿@model ThesisProcessor.Models.ThesesViewModels.ThesisSaveViewModel
+
+@{
+    ViewData["Title"] = "Reject";
+}
+
+<h2>Reject</h2>
+
+<p>Please, enter your reason for rejecting this dissertation:</p>
+
+<h4>@Model.Title <span style="font-size: 12px">by</span> @Model.Author</h4>
+<form asp-controller="Theses" asp-action="Reject" method="post">
+    <div class="form-group">
+        <label asp-for="@Model.RejectReason"></label>
+        <textarea asp-for="@Model.RejectReason"></textarea>
+    </div>
+
+    <button type="submit">Reject Thesis</button>
+</form>

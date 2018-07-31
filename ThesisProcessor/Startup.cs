@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -35,6 +36,7 @@ namespace ThesisProcessor
             services.AddTransient<IThesisDAL, ThesisDAL>();
             services.AddTransient<IThesisService, ThesisService>();
 
+            services.AddAutoMapper();
             services.AddMvc();
         }
 

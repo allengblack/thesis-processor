@@ -24,11 +24,6 @@ namespace ThesisProcessor.Data
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
 
-            //builder.Entity<Thesis>()
-            //    .HasOne(t => t.Uploader)
-            //    .WithOne(a => a.Thesis)
-            //    .HasForeignKey<Thesis>(t => t.UploaderId)
-
             builder.Entity<ApplicationUser>()
                 .HasMany(a => a.Theses)
                 .WithOne(t => t.Uploader)

@@ -10,6 +10,7 @@ namespace ThesisProcessor.Interfaces
         Task<Thesis> GetThesis(string id);
         Task SubmitThesis(Thesis thesis);
         Task UpdateThesis(Thesis thesis);
+        Task ApproveThesis(string id);
         Task DeleteThesis(string thesisId);
     }
 }

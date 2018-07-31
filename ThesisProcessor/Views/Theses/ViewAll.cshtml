@@ -26,9 +26,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.DateCreated)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Approved)
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -55,12 +52,22 @@
                     @Html.DisplayFor(modelItem => item.DateCreated)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Approved)
-                </td>
-                <td>
-                    <a asp-action="Download" asp-route-id="@item.Id">Download</a> |
-                    <a asp-action="Approve" asp-route-id="@item.Id" onclick="return confirm('Approve thesis @item.Title?')">Approve</a> |
-                    <a asp-action="Reject" asp-route-id="@item.Id" onclick="return confirm('Are you sure you want to reject this thesis?')">Reject</a>
+                   @if (!item.Approved && (item.RejectReason != null))
+                    {
+                        <p>Rejected</p>
+                   }
+                   else if (item.Approved){
+                        <p>Approved</p>
+                   }
+                   else
+                   {
+                        <div>
+                            <a asp-action='Download' asp-route-id='@item.Id'>Download</a> |
+                            <a asp-action='Approve' asp-route-id='@item.Id' onclick="return confirm('Approve thesis @item.Title?')">Approve</a> |
+                            <a asp-action='Reject' asp-route-id='@item.Id'>Reject</a>
+                        </div>
+
+                    }
                 </td>
             </tr>
         }
