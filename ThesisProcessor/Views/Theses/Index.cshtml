@@ -1,0 +1,89 @@
+﻿@model ThesisProcessor.Models.Thesis
+
+@{
+    ViewData["Title"] = "Thesis Processor Submission Page";
+}
+
+<h2>Thesis Processor Submission Page</h2>
+
+@if (Model != null)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Title)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Author)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Abstract)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.References)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Supervisor)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateCreated)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Approved)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => Model.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => Model.Author)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => Model.Abstract)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => Model.References)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => Model.Supervisor)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => Model.DateCreated)
+                </td>
+                <td>
+                    @if (Model.Approved)
+                    {
+                        <p>Approved</p>
+                    }
+                    else if (!Model.Approved && (Model.RejectReason != null))
+                    {
+                        <p>Rejected</p>
+
+                    }
+                    else
+                    {
+                        <p>Pending Approval</p>
+                    }
+                </td>
+                <td>
+                    @if (!Model.Approved && (Model.RejectReason != null))
+                    {
+                        @Html.DisplayFor(modelItem => Model.RejectReason)
+                    }
+                </td>
+            </tr>
+        </tbody>
+    </table>
+}
+else
+{
+    <p>
+        You have not submitted your dissertation yet. Do so <a asp-action='Submit'>here</a>.
+    </p>
+
+}

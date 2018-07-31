@@ -9,6 +9,7 @@ namespace ThesisProcessor.Interfaces
     {
         Task<IEnumerable<Thesis>> GetAllTheses();
         Task<Thesis> GetThesis(string id);
+        Task<Thesis> GetThesisForLoggedInUser();
         Task SubmitThesis(ThesisCreateViewModel model);
         Task UpdateThesis(ThesisSaveViewModel thesis);
         Task ApproveThesis(string id);

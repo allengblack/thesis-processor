@@ -14,7 +14,7 @@ namespace ThesisProcessor.Data
 
         public async Task<IEnumerable<Thesis>> GetAllThesesAsync()
         {
-            return _dbContext.Theses.ToList();
+            return await _dbContext.Theses.ToListAsync();
         }
 
         public ThesisDAL(ApplicationDbContext applicationDbContext)
@@ -54,7 +54,17 @@ namespace ThesisProcessor.Data
 
         public async Task<Thesis> GetThesis(string id)
         {
-            return _dbContext.Theses.First(t => t.Id == id);
+            return await _dbContext.Theses.FirstOrDefaultAsync(t => t.Id == id);
+        }
+
+        public async Task<Thesis> GetThesisForLoggedInUser(string id)
+        {
+            return await _dbContext.Theses.FirstOrDefaultAsync(t => t.UploaderId == id);
+            //if (thesis == null)
+            //{
+            //    return null;
+            //}
+            //return thesis;
         }
     }
 }

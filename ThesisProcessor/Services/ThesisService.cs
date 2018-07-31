@@ -38,6 +38,12 @@ namespace ThesisProcessor.Services
             return await _thesisDAL.GetThesis(id);
         }
 
+        public async Task<Thesis> GetThesisForLoggedInUser()
+        {
+            var user = await GetCurrentUserAsync();
+            return await _thesisDAL.GetThesisForLoggedInUser(user.Id);
+        }
+
         public async Task SubmitThesis(ThesisCreateViewModel model)
         {
             var user = await GetCurrentUserAsync();

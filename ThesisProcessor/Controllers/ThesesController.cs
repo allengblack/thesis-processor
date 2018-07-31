@@ -1,15 +1,16 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using ThesisProcessor.Interfaces;
-using ThesisProcessor.Models;
 using ThesisProcessor.Models.ThesesViewModels;
 using static ThesisProcessor.Constants.Constants;
 
 namespace ThesisProcessor.Controllers
 {
+    [Authorize]
     public class ThesesController : Controller
     {
         private readonly IThesisService _thesisService;
@@ -19,6 +20,13 @@ namespace ThesisProcessor.Controllers
         {
             _thesisService = thesisService;
             _mapper = mapper;
+        }
+
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> Index()
+        {
+            var theses = await _thesisService.GetThesisForLoggedInUser();
+            return View(theses);
         }
 
         public IActionResult Submit()
@@ -37,11 +45,12 @@ namespace ThesisProcessor.Controllers
 
                 await _thesisService.SubmitThesis(model);
 
-                return RedirectToAction(nameof(Submit));
+                return RedirectToAction(nameof(Index));
             }
             return Content("Error uploading document");
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ViewAll()
         {
             var theses = await _thesisService.GetAllTheses();
@@ -65,6 +74,7 @@ namespace ThesisProcessor.Controllers
             return Content("File not found.");
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Reject(string id)
         {
             var thesis = await _thesisService.GetThesis(id);
@@ -72,6 +82,7 @@ namespace ThesisProcessor.Controllers
             return View(thesisModel);
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Approve(string id)
         {
             await _thesisService.ApproveThesis(id);
@@ -79,6 +90,7 @@ namespace ThesisProcessor.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles="Admin")]
         public async Task<IActionResult> Reject(ThesisSaveViewModel model)
         {
             if (ModelState.IsValid)

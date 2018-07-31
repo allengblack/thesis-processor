@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using ThesisProcessor.Models;
@@ -21,6 +22,9 @@ namespace ThesisProcessor.Controllers
     public class AccountController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
+
+        //var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+        private readonly IServiceProvider _serviceProvider;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
@@ -29,12 +33,14 @@ namespace ThesisProcessor.Controllers
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
+            IServiceProvider serviceProvider,
             ILogger<AccountController> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _logger = logger;
+            _serviceProvider = serviceProvider;
         }
 
         [TempData]
@@ -65,7 +71,16 @@ namespace ThesisProcessor.Controllers
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
-                    return RedirectToLocal(returnUrl);
+                    var user = await _userManager.FindByEmailAsync(model.Email);
+
+                    if (await _userManager.IsInRoleAsync(user, "Admin"))
+                    {
+                        return RedirectToAction("ViewAll", "Theses");
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index", "Theses");
+                    }
                 }
                 if (result.RequiresTwoFactor)
                 {
@@ -220,7 +235,28 @@ namespace ThesisProcessor.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
+
+                var RoleManager = _serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+                //var UserManager = _serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+
+                IdentityResult roleResult;
+                //Adding Addmin Role    
+                var roleCheck = await RoleManager.RoleExistsAsync("Admin");
+                if (!roleCheck)
+                {
+                    //create the roles and seed them to the database    
+                    roleResult = await RoleManager.CreateAsync(new IdentityRole("Admin"));
+                }
+
+                roleCheck = await RoleManager.RoleExistsAsync("User");
+                if (!roleCheck)
+                {
+                    //create the roles and seed them to the database    
+                    roleResult = await RoleManager.CreateAsync(new IdentityRole("User"));
+                }
+
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email, Name = model.Name };
+
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -229,6 +265,7 @@ namespace ThesisProcessor.Controllers
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
                     await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
+                    await _userManager.AddToRoleAsync(user, "User");
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation("User created a new account with password.");

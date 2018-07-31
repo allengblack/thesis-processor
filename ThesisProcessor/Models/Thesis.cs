@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace ThesisProcessor.Models
 {
@@ -11,11 +12,12 @@ namespace ThesisProcessor.Models
         public string References { get; set; }
         public string Supervisor { get; set; }
         public string FileName { get; set; }
+
+        [Display(Name ="Date Created")]
         public DateTime DateCreated { get; set; }
-        public DateTime DateModified { get; set; }
+
         public bool Approved { get; set; }
         public string RejectReason { get; set; }
-
         public string UploaderId { get; set; }
         public ApplicationUser Uploader { get; set; }
     }
