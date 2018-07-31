@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using ThesisProcessor.Interfaces;
 using ThesisProcessor.Models;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace ThesisProcessor.Data
 {
@@ -32,9 +33,16 @@ namespace ThesisProcessor.Data
             throw new NotImplementedException();
         }
 
-        public Task UpdateThesis(Thesis thesis)
+        public async Task UpdateThesis(Thesis thesis)
         {
-            throw new NotImplementedException();
+            _dbContext.Attach(thesis);
+            _dbContext.Entry(thesis).State = EntityState.Modified;
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<Thesis> GetThesis(string id)
+        {
+            return _dbContext.Theses.First(t => t.Id == id);
         }
     }
 }

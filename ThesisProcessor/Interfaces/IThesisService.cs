@@ -8,6 +8,7 @@ namespace ThesisProcessor.Interfaces
     public interface IThesisService
     {
         Task<IEnumerable<Thesis>> GetAllTheses();
+        Task<Thesis> GetThesis(string id);
         Task SubmitThesis(ThesisSaveViewModel model);
         Task UpdateTheis(ThesisSaveViewModel model);
         Task DeleteThesis(string thesisId, string filename);

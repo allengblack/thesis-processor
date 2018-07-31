@@ -29,6 +29,11 @@ namespace ThesisProcessor.Services
             return await _thesisDAL.GetAllThesesAsync();
         }
 
+        public async Task<Thesis> GetThesis(string id)
+        {
+            return await _thesisDAL.GetThesis(id);
+        }
+
         public async Task SubmitThesis(ThesisSaveViewModel model)
         {
             var user = await GetCurrentUserAsync();
@@ -43,7 +48,7 @@ namespace ThesisProcessor.Services
                 References = model.References,
                 FileName = filename,
                 UploaderId = user.Id,
-                DateCreated = DateTime.UtcNow
+                DateCreated = new DateTime(Convert.ToInt32(model.DateOfThesis.Year), Convert.ToInt32(model.DateOfThesis.Month), 1)
             };
 
             using (var stream = new FileStream(Path.Combine(PATH, filename), FileMode.Create))
@@ -59,9 +64,10 @@ namespace ThesisProcessor.Services
             await _thesisDAL.DeleteThesis(thesisId);
         }
 
-        public Task UpdateTheis(ThesisSaveViewModel model)
+        public async Task UpdateTheis(ThesisSaveViewModel model)
         {
-            throw new System.NotImplementedException();
+            var thesis = new Thesis();
+            await _thesisDAL.UpdateThesis(thesis);
         }
 
         #region PrivateMethods
@@ -76,7 +82,9 @@ namespace ThesisProcessor.Services
             return new Dictionary<string, string>
             {
                 {"application/pdf", ".pdf"},
-                {"application/octet-stream", ".doc"},
+                {"application/msword", ".doc"},
+                {"application/octet-stream", ".docx" },
+                {"application/vnd.openxmlformats-officedocument.wordprocessingml.document", ".docx" }
             };
         }
 
