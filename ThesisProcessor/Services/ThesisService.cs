@@ -68,10 +68,22 @@ namespace ThesisProcessor.Services
             await _thesisDAL.SubmitThesis(thesis);
         }
 
-        public async Task DeleteThesis(string thesisId, string filename)
+        public async Task DeleteThesis(string id)
         {
-            File.Delete(PATH + filename);
-            await _thesisDAL.DeleteThesis(thesisId);
+            var thesis = await _thesisDAL.GetThesis(id);
+            if (thesis != null)
+            {
+                string fullPath = PATH + thesis.FileName;
+                if (System.IO.File.Exists(fullPath))
+                {
+                    System.IO.File.Delete(fullPath);
+                }
+                await _thesisDAL.DeleteThesis(id);
+            }
+            else
+            {
+                throw new FileNotFoundException();
+            }
         }
 
         public async Task UpdateThesis(ThesisSaveViewModel model)
@@ -83,6 +95,13 @@ namespace ThesisProcessor.Services
         public async Task ApproveThesis(string id)
         {
             await _thesisDAL.ApproveThesis(id);
+        }
+
+
+
+        public async Task ResetThesisApproval(string id)
+        {
+            await _thesisDAL.ResetThesisApproval(id);
         }
 
         #region PrivateMethods

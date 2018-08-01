@@ -55,10 +55,12 @@
                         @if (!item.Approved && (item.RejectReason != null))
                         {
                             <p>Rejected</p>
+                            <p><a asp-action='Reset' asp-route-id='@item.Id'>Reset</a></p>
                         }
                         else if (item.Approved)
                         {
                             <p>Approved</p>
+                            <p><a asp-action='Reset' asp-route-id='@item.Id'>Reset</a></p>
                         }
                         else
                         {

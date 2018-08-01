@@ -40,7 +40,7 @@
 
         <div class="form-group">
             <label asp-for="@Model.Year" class="control-label">Year of Submission</label>
-            <input type="number" min="2000" default="2000" minlength="4" maxlength="4" asp-for="@Model.Year" class="form-control" />
+            <input type="number" min="2000" default="2000" minlength="4" maxlength="4" asp-for="@Model.Year" class="form-control" placeholder="No years before the year 2000 are allowed" />
         </div>
 
         <div class="form-group">

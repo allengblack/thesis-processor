@@ -78,6 +78,10 @@
             </tr>
         </tbody>
     </table>
+
+    <p>
+        <a asp-action='Delete' asp-route-id="@Model.Id">Delete Thesis</a>.
+    </p>
 }
 else
 {
@@ -87,7 +91,7 @@ else
 }
 
 @*@section Scripts {
-    <script>
-        $('#thesis_table').DataTable();
-    </script>
-}*@
+        <script>
+            $('#thesis_table').DataTable();
+        </script>
+    }*@

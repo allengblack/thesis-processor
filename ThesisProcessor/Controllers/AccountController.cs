@@ -79,7 +79,7 @@ namespace ThesisProcessor.Controllers
                     }
                     else
                     {
-                        return RedirectToAction("Index", "Theses");
+                        return RedirectToAction("Index", "Home");
                     }
                 }
                 if (result.RequiresTwoFactor)
@@ -240,15 +240,15 @@ namespace ThesisProcessor.Controllers
                 //var UserManager = _serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
                 IdentityResult roleResult;
-                //Adding Addmin Role    
-                var roleCheck = await RoleManager.RoleExistsAsync("Admin");
-                if (!roleCheck)
-                {
-                    //create the roles and seed them to the database    
-                    roleResult = await RoleManager.CreateAsync(new IdentityRole("Admin"));
-                }
+                ////Adding Addmin Role    
+                //var roleCheck = await RoleManager.RoleExistsAsync("Admin");
+                //if (!roleCheck)
+                //{
+                //    //create the roles and seed them to the database    
+                //    roleResult = await RoleManager.CreateAsync(new IdentityRole("Admin"));
+                //}
 
-                roleCheck = await RoleManager.RoleExistsAsync("User");
+               var roleCheck = await RoleManager.RoleExistsAsync("User");
                 if (!roleCheck)
                 {
                     //create the roles and seed them to the database    

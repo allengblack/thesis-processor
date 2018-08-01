@@ -32,6 +32,8 @@ namespace ThesisProcessor
                 .AddDefaultTokenProviders();
 
             // Add application services.
+            services.AddTransient<SampleData>();
+
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<IThesisDAL, ThesisDAL>();
             services.AddTransient<IThesisService, ThesisService>();
@@ -41,8 +43,10 @@ namespace ThesisProcessor
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, SampleData data)
         {
+            data.SeedAdminUser();
+
             if (env.IsDevelopment())
             {
                 app.UseBrowserLink();

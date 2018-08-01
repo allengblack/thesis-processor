@@ -11,8 +11,8 @@
 <h4>@Model.Title <span style="font-size: 12px">by</span> @Model.Author</h4>
 <form asp-controller="Theses" asp-action="Reject" method="post">
     <div class="form-group">
-        <label asp-for="@Model.RejectReason"></label>
-        <textarea asp-for="@Model.RejectReason"></textarea>
+        <label asp-for="@Model.RejectReason" class="control-label"></label>
+        <textarea asp-for="@Model.RejectReason" class="form-control"></textarea>
     </div>
 
     <button type="submit">Reject Thesis</button>

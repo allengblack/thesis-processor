@@ -13,6 +13,7 @@ namespace ThesisProcessor.Interfaces
         Task SubmitThesis(ThesisCreateViewModel model);
         Task UpdateThesis(ThesisSaveViewModel thesis);
         Task ApproveThesis(string id);
-        Task DeleteThesis(string thesisId, string filename);
+        Task DeleteThesis(string thesisId);
+        Task ResetThesisApproval(string id);
     }
 }

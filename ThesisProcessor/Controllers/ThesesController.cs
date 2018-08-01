@@ -104,6 +104,18 @@ namespace ThesisProcessor.Controllers
             }
         }
 
+        public async Task<IActionResult> Reset(string id)
+        {
+            await _thesisService.ResetThesisApproval(id);
+            return RedirectToAction(nameof(ViewAll));
+        }
+
+        public async Task<IActionResult> Delete(string id)
+        {
+            await _thesisService.DeleteThesis(id);
+            return RedirectToAction(nameof(Index));
+        }
+
         #region private
         private string GetContentType(string path)
         {

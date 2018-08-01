@@ -13,5 +13,6 @@ namespace ThesisProcessor.Interfaces
         Task UpdateThesis(Thesis thesis);
         Task ApproveThesis(string id);
         Task DeleteThesis(string thesisId);
+        Task ResetThesisApproval(string id);
     }
 }
