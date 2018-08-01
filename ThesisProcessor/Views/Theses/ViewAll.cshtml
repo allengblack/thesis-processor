@@ -5,71 +5,141 @@
 
 <h2>Thesis Processor Admin Panel</h2>
 
-<table class="table">
+<table id="theses-table" class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Title)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Author)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Abstract)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.References)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Supervisor)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateCreated)
+                </th>
+                <th>Approval Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Author)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Abstract)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.References)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Supervisor)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateCreated)
+                    </td>
+                    <td>
+                        @if (!item.Approved && (item.RejectReason != null))
+                        {
+                            <p>Rejected</p>
+                        }
+                        else if (item.Approved)
+                        {
+                            <p>Approved</p>
+                        }
+                        else
+                        {
+                            <div>
+                                <a asp-action='Download' asp-route-id='@item.Id'>Download</a> |
+                                <a asp-action='Approve' asp-route-id='@item.Id' onclick="return confirm('Approve thesis @item.Title?')">Approve</a> |
+                                <a asp-action='Reject' asp-route-id='@item.Id'>Reject</a>
+                            </div>
+
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+@*@section Scripts {
+    <script type="text/javascript">
+        Vue.component('thesis-grid', {
+            template: `
+    <div>
+    <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Title)
+                Title
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Author)
+                Author
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Abstract)
+                Abstract
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.References)
+               References
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Supervisor)
+                Supervisor
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DateCreated)
+                Date Created
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Title)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Author)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Abstract)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.References)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Supervisor)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DateCreated)
-                </td>
-                <td>
-                   @if (!item.Approved && (item.RejectReason != null))
-                    {
-                        <p>Rejected</p>
-                   }
-                   else if (item.Approved){
-                        <p>Approved</p>
-                   }
-                   else
-                   {
-                        <div>
-                            <a asp-action='Download' asp-route-id='@item.Id'>Download</a> |
-                            <a asp-action='Approve' asp-route-id='@item.Id' onclick="return confirm('Approve thesis @item.Title?')">Approve</a> |
-                            <a asp-action='Reject' asp-route-id='@item.Id'>Reject</a>
-                        </div>
-
-                    }
-                </td>
-            </tr>
-        }
+      <tr v-for="thesis in jsonData">
+        <td>{{thesis.Title}}</td>
+        <td>{{thesis.Author}}</td>
+        <td>{{thesis.Abstract}}</td>
+        <td>{{thesis.References}}</td>
+        <td>{{thesis.Supervisor}}</td>
+        <td>{{thesis.DateCreated}}</td>
+    
+        <td v-if="thesis.Approved && thesis.RejectReason">
+                            <p>Rejected</p>
+        </td>
+        <td v-else-if="thesis.Approved">
+            <p>Approved</p>
+        </td>
+        <td v-else>
+            <div>
+                <a :href="'Download/' + thesis.Id">Download</a> |
+                <a :href="'Approve/' + thesis.Id" onclick="return confirm('Approve thesis?')">Approve</a> |
+                <a :href="'Reject/' + thesis.Id">Reject</a>
+            </div>
+        </td>
+      </tr>
     </tbody>
-</table>
+    </table>
+    </div>
+    `,
+            data() {
+                return {
+                    jsonData: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model))
+                }
+            }
+        })
+
+        var app = new Vue({
+            el: '#app'
+        })
+    </script>
+}*@

@@ -7,6 +7,6 @@ namespace ThesisProcessor.Models
     public class ApplicationUser : IdentityUser
     {
         public string Name { get; set; }
-        public ICollection<Thesis> Theses { get; set; }
+        public Thesis Thesis { get; set; }
     }
 }

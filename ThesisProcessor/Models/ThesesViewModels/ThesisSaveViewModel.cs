@@ -13,7 +13,6 @@ namespace ThesisProcessor.Models.ThesesViewModels
         public string Author { get; set; }
         public string Supervisor { get; set; }
         public string FileName { get; set; }
-        public DateTime DateModified { get; set; }
         public bool Approved { get; set; }
 
         [Display(Name = "Reason for Rejecting")]

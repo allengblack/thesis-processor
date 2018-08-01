@@ -48,17 +48,17 @@ namespace ThesisProcessor.Services
         {
             var user = await GetCurrentUserAsync();
             var filename = $"{model.Author}-{model.Title}{GetFileExtension(model.Thesis.ContentType)}";
-
+            var refs = model.References.Replace(",", "\n");
             var thesis = new Thesis
             {
                 Title = model.Title,
                 Author = model.Author,
                 Abstract = model.Abstract,
                 Supervisor = model.Supervisor,
-                References = model.References,
+                References = refs,
                 FileName = filename,
                 UploaderId = user.Id,
-                DateCreated = new DateTime(Convert.ToInt32(model.DateOfThesis.Year), Convert.ToInt32(model.DateOfThesis.Month), 1)
+                DateCreated = new DateTime(Convert.ToInt32(model.Year), Convert.ToInt32(model.Month), 1)
             };
 
             using (var stream = new FileStream(Path.Combine(PATH, filename), FileMode.Create))

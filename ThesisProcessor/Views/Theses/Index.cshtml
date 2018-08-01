@@ -8,31 +8,30 @@
 
 @if (Model != null)
 {
-    <table class="table">
+    <table id="thesistable">
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.Title)
+                    Title
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Author)
+                    Author
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Abstract)
+                    Abstract
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.References)
+                    References
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Supervisor)
+                    Supervisor
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.DateCreated)
+                    Date Created
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Approved)
+                    Approval Status
                 </th>
-                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -85,5 +84,10 @@ else
     <p>
         You have not submitted your dissertation yet. Do so <a asp-action='Submit'>here</a>.
     </p>
-
 }
+
+@*@section Scripts {
+    <script>
+        $('#thesis_table').DataTable();
+    </script>
+}*@

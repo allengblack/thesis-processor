@@ -14,10 +14,12 @@ namespace ThesisProcessor.Models
         public string FileName { get; set; }
 
         [Display(Name ="Date Created")]
+        [DisplayFormat(DataFormatString = "{0:MMM yyyy}")]
         public DateTime DateCreated { get; set; }
 
         public bool Approved { get; set; }
         public string RejectReason { get; set; }
+
         public string UploaderId { get; set; }
         public ApplicationUser Uploader { get; set; }
     }

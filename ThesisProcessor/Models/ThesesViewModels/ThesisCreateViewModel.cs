@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using DataAnnotationsExtensions;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -13,21 +14,23 @@ namespace ThesisProcessor.Models.ThesesViewModels
         public string Supervisor { get; set; }
         public string FileName { get; set; }
 
-        [Display(Name="Date of Submission")]
-        public DateTime DateCreated { get; set; }
+        [Min(2000), Max(2018)]
+        public int Year { get; set; }
+        public Month Month { get; set; }
 
         public int Day { get; set; }
 
         [Display(Name = "Date of Submission")]
         public DateTime DateOfThesis { get; set; }
+
         public IFormFile Thesis { get; set; }
     }
 }
 
-//public enum Month
-//{
-//    JANUARY = 1, FEBRUARY = 2, MARCH = 3,
-//    APRIL = 4, MAY = 5, JUNE = 6,
-//    JULY = 7, AUGUST = 8, SEPTEMBER = 9,
-//    OCTOBER = 10, NOVEMBER = 11, DECEMBER = 12
-//}
+public enum Month
+{
+    JANUARY = 1, FEBRUARY = 2, MARCH = 3,
+    APRIL = 4, MAY = 5, JUNE = 6,
+    JULY = 7, AUGUST = 8, SEPTEMBER = 9,
+    OCTOBER = 10, NOVEMBER = 11, DECEMBER = 12
+}
