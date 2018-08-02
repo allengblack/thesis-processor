@@ -3,51 +3,43 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using ThesisProcessor.Data;
 using ThesisProcessor.Models;
 
-namespace ThesisProcessor.Data
+public class SampleData
 {
-    public class SampleData
+    private ApplicationDbContext _context;
+
+    public SampleData(ApplicationDbContext context)
     {
-        private ApplicationDbContext _context;
+        _context = context;
+    }
 
-        public SampleData(ApplicationDbContext context)
+    public async Task SeedAdminUser()
+    {
+        var user = new ApplicationUser
         {
-            _context = context;
-        }
+            UserName = "admin@thesismanager.com",
+            NormalizedUserName = "ADMIN@THESISMANAGER.COM",
+            Email = "admin@thesismanager.com",
+            NormalizedEmail = "ADMIN@THESISMANAGER.COM",
+            EmailConfirmed = true,
+            LockoutEnabled = false,
+            SecurityStamp = Guid.NewGuid().ToString()
+        };
 
-        public async Task SeedAdminUser()
+        if (!_context.Users.Any(u => u.UserName == user.UserName))
         {
+            var password = new PasswordHasher<ApplicationUser>();
+            var hashed = password.HashPassword(user, "password");
+            user.PasswordHash = hashed;
             var userStore = new UserStore<ApplicationUser>(_context);
-            var user = new ApplicationUser
-            {
-                UserName = "Email@email.com",
-                NormalizedUserName = "email@email.com",
-                Email = "Email@email.com",
-                NormalizedEmail = "email@email.com",
-                EmailConfirmed = true,
-                LockoutEnabled = false,
-                SecurityStamp = Guid.NewGuid().ToString()
-            };
-
-            var roleStore = new RoleStore<IdentityRole>(_context);
-
-            if (!_context.Roles.Any(r => r.Name == "Admin"))
-            {
-                await roleStore.CreateAsync(new IdentityRole { Name = "Admin", NormalizedName = "ADMIN" });
-            }
-
-            if (!_context.Users.Any(u => u.UserName == user.UserName))
-            {
-                var password = new PasswordHasher<ApplicationUser>();
-                var hashed = password.HashPassword(user, "password");
-                user.PasswordHash = hashed;
-
-                await userStore.CreateAsync(user);
-            }
-            user = await userStore.FindByEmailAsync("admin@emial.com");
-            await userStore.AddToRoleAsync(user, "Admin");
-            await _context.SaveChangesAsync();
+            await userStore.CreateAsync(user);
+            var role = new IdentityRole { Name = "Admin", Id = Guid.NewGuid().ToString() };
+            _context.Roles.Add(role);
+            _context.UserRoles.Add(new IdentityUserRole<string> { UserId = user.Id, RoleId = role.Id });
         }
+
+        await _context.SaveChangesAsync();
     }
 }

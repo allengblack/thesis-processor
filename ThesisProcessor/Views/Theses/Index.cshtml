@@ -17,7 +17,7 @@
                 <th>
                     Author
                 </th>
-                <th>
+                <th width="55%">
                     Abstract
                 </th>
                 <th>
@@ -32,6 +32,12 @@
                 <th>
                     Approval Status
                 </th>
+                @if (Model.RejectReason != null)
+                {
+                    <th>
+                        Rejection Reason
+                    </th>
+                }
             </tr>
         </thead>
         <tbody>
