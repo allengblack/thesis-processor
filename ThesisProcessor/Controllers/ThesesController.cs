@@ -42,9 +42,14 @@ namespace ThesisProcessor.Controllers
             {
                 if (model.Thesis == null || model.Thesis.Length == 0)
                     return Content("file not selected");
-
-                await _thesisService.SubmitThesis(model);
-
+                try
+                {
+                    await _thesisService.SubmitThesis(model);
+                }
+                catch (FileLoadException)
+                {
+                    return Content("Only PDF and DOCX files allowed");
+                }
                 return RedirectToAction(nameof(Index));
             }
             return Content("Error uploading document");

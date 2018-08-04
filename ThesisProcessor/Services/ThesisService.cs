@@ -46,6 +46,11 @@ namespace ThesisProcessor.Services
 
         public async Task SubmitThesis(ThesisCreateViewModel model)
         {
+            string ext = System.IO.Path.GetExtension(model.Thesis.FileName);
+            if (!ext.ToLower().Equals(".pdf") || !ext.ToLower().Equals(".docx"))
+            {
+                throw new FileLoadException("Invalid format");
+            }
             var user = await GetCurrentUserAsync();
             var filename = $"{model.Author}-{model.Title}{GetFileExtension(model.Thesis.ContentType)}";
             var refs = model.References.Replace(",", "\n");
@@ -60,6 +65,11 @@ namespace ThesisProcessor.Services
                 UploaderId = user.Id,
                 DateCreated = new DateTime(Convert.ToInt32(model.Year), Convert.ToInt32(model.Month), 1)
             };
+
+            if (!Directory.Exists(PATH))
+            {
+                Directory.CreateDirectory(PATH);
+            }
 
             using (var stream = new FileStream(Path.Combine(PATH, filename), FileMode.Create))
             {

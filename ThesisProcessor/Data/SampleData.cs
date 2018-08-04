@@ -38,8 +38,7 @@ public class SampleData
             var role = new IdentityRole { Name = "Admin", Id = Guid.NewGuid().ToString() };
             _context.Roles.Add(role);
             _context.UserRoles.Add(new IdentityUserRole<string> { UserId = user.Id, RoleId = role.Id });
+            await _context.SaveChangesAsync();
         }
-
-        await _context.SaveChangesAsync();
     }
 }
